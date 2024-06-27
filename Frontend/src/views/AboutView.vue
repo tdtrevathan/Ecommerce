@@ -18,13 +18,14 @@
   import axios from 'axios'
   
   //TODO turn key into secret
-  const stripePromise = loadStripe('public key');
+  let stripePromise:any = null;
   const cardElement = ref<StripeCardElement | null>(null)
   const clientSecret = ref(''
 
   )
   onMounted(async () => {
     try {
+      stripePromise = loadStripe(await getPublicKey());
       const stripe = await stripePromise;
       if (!stripe) {
         console.log("Stripe failed")
@@ -34,7 +35,8 @@
       cardElement.value = elements.create('card');
       if (cardElement.value) {
         cardElement.value.mount('#card-element');
-        const response = await axios.post('http://localhost:5000/create-payment-intent', { amount: 100.00 }); // Amount in cents
+
+        const response = await axios.post('http://localhost:5000/create-payment-intent', { amount: 100 }); // Amount in cents
         clientSecret.value = response.data.clientSecret;
       }
       else {
@@ -45,7 +47,7 @@
       console.log(error)
     }
   });
-  
+
   const handleSubmit = async () => {
     const errorMessage = ref('');
     const stripe = await stripePromise;
@@ -69,6 +71,19 @@
     }
     else{
       alert('something went wrong')
+    }
+  }
+
+  const getPublicKey = async () => {
+    try{
+      const param = 'PublicStripeToken'
+      const response = await axios.get(`http://localhost:5000/secret/${param}`);
+      console.log("RESPONSE", response)
+      console.log("RESPONSE DATA", response.data)
+      return response.data;
+    }
+    catch(err){
+      console.log(err);
     }
   }
   </script>
