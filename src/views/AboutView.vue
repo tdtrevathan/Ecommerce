@@ -13,20 +13,63 @@
   </template>
   
   <script setup lang="ts">
-  import { loadStripe } from '@stripe/stripe-js';
-  import { onMounted } from 'vue';
+  import { StripeCardElement, loadStripe } from '@stripe/stripe-js';
+  import { onMounted, ref } from 'vue';
+  import axios from 'axios'
   
-  const stripePromise = loadStripe('pk_test_51PW8yARqyLQWA5CO0tCv3Zqf14PBzAQISSQwtOISuAadLoQlc1W1tfecsn6e31s81l0eBehVMCaWGEP3mgsNsaVY007BSpsCK5');
-  
+  //TODO turn key into secret
+  const stripePromise = loadStripe('public key');
+  const cardElement = ref<StripeCardElement | null>(null)
+  const clientSecret = ref(''
+
+  )
   onMounted(async () => {
-    const stripe = await stripePromise;
-    const elements = stripe.elements();
-    const cardElement = elements.create('card');
-    cardElement.mount('#card-element');
+    try {
+      const stripe = await stripePromise;
+      if (!stripe) {
+        console.log("Stripe failed")
+        return
+      }
+      const elements = stripe.elements();
+      cardElement.value = elements.create('card');
+      if (cardElement.value) {
+        cardElement.value.mount('#card-element');
+        const response = await axios.post('http://localhost:5000/create-payment-intent', { amount: 100.00 }); // Amount in cents
+        clientSecret.value = response.data.clientSecret;
+      }
+      else {
+        console.log('failed to mount')
+      }
+    }
+    catch (error) {
+      console.log(error)
+    }
   });
   
-  const handleSubmit = () => {
-    // Your form submission logic here
+  const handleSubmit = async () => {
+    const errorMessage = ref('');
+    const stripe = await stripePromise;
+    
+    if (cardElement.value) {
+
+      const { error, paymentIntent } =
+        await stripe.confirmCardPayment(clientSecret.value, {
+          payment_method: {
+            card: cardElement.value,
+          },
+        });
+      
+      if (error) {
+        errorMessage.value = error.message ? error.message : 'message undefined';
+      } 
+      else if (paymentIntent.status === 'succeeded') {
+        alert('Payment succeeded!');
+        //closeModal();
+      }
+    }
+    else{
+      alert('something went wrong')
+    }
   }
   </script>
   

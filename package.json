@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@stripe/stripe-js": "^4.0.0",
+    "axios": "^1.7.2",
     "core-js": "^3.8.3",
     "vue": "^3.2.13",
     "vue-class-component": "^8.0.0-0",
