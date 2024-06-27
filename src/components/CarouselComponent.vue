@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="carousel">
         <div class="slide-info" v-for="slide, index in carouselSlides" :key="index">
             <transition name="slide" mode="in-out">
                 <div v-show="currentSlide === index">
@@ -27,34 +27,26 @@
 
 <script setup lang="ts">
 import { ref } from 'vue'
-import SlideComponent from '@/components/SlideComponent.vue'
+import { CarouselImageSelector } from '@/services/carouselImageSeletor'
 
 const carouselSlides = ['https://upload.wikimedia.org/wikipedia/commons/d/d8/Friedrich-Johann-Justin-Bertuch_Mythical-Creature-Dragon_1806.jpg',
 'https://upload.wikimedia.org/wikipedia/commons/7/71/Ninedragonwallpic1.jpg',
 'https://upload.wikimedia.org/wikipedia/commons/4/4f/Zmei_Gorynich_-_Ystad-2019.jpg']
 
 const currentSlide = ref(0)
+const carouselImageSelector = new CarouselImageSelector();
 
 const incriment = () => {
-    let newVal = currentSlide.value += 1;
-
-    currentSlide.value =
-        newVal >= carouselSlides.length 
-            ? currentSlide.value = 0
-            : newVal
+    currentSlide.value = 
+    carouselImageSelector.incriment(currentSlide.value, carouselSlides.length)
 } 
 const decriment = () => {
-    let newVal = currentSlide.value -= 1;
-
-    currentSlide.value =
-        newVal < 0 
-        ? carouselSlides.length - 1
-        : newVal
+    currentSlide.value = 
+    carouselImageSelector.decriment(currentSlide.value, carouselSlides.length)
 }
 
 const selectImage = (index: number) => {
     currentSlide.value = index;
-
 }
 </script>
 
@@ -143,5 +135,15 @@ i {
 }
 .slide-enter-to, .slide-leave {
   transform: translateX(0%);
+}
+
+.carousel {
+  position: relative;
+  max-height: 70vh;
+  height: 70vh;
+  width: 75vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 </style>
