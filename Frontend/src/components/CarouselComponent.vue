@@ -3,7 +3,7 @@
         <div class="slide-info" v-for="slide, index in carouselSlides" :key="index">
             <transition name="slide" mode="in-out">
                 <div v-show="currentSlide === index">
-                    <router-link to="/about">
+                    <router-link to="/checkout">
                         <img class="carousel-image" :src="slide" />
                     </router-link>
                 </div>
