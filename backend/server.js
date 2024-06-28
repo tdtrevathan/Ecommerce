@@ -6,8 +6,8 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
 
-const secretController = require('../Backend/secretController')
-const stripeController = require('../Backend/stripeController')
+const secretController = require('./secretController.js')
+const stripeController = require('./stripeController.js')
 
 const setupStripe = async () => {
   const stripeSecret = await secretController.getSecretFromVault(process.env.AZURE_STRIPE_SECRET_NAME);
