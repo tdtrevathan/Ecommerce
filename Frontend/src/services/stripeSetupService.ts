@@ -24,7 +24,7 @@ export class StripeSetupService {
         try {
             const param = 'PublicStripeToken'
             const response = await axios.get(`http://localhost:5000/secret/${param}`);
-            return response.data;
+            return response.data.secret;
         }
         catch (err) {
             console.log(err);
