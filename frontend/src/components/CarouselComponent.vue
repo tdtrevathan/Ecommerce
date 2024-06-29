@@ -4,7 +4,7 @@
             <transition name="slide" mode="in-out">
                 <div v-show="currentSlide === index">
                     <router-link to="/checkout">
-                        <img class="carousel-image" :src="slide" />
+                        <img class="carousel-image" :src="require(`@/assets/images/${slide}`)" />
                     </router-link>
                 </div>
             </transition>
@@ -26,12 +26,12 @@
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { onMounted, ref } from 'vue'
 import { CarouselImageSelector } from '@/services/carouselImageSeletor'
 
-const carouselSlides = ['https://upload.wikimedia.org/wikipedia/commons/d/d8/Friedrich-Johann-Justin-Bertuch_Mythical-Creature-Dragon_1806.jpg',
-'https://upload.wikimedia.org/wikipedia/commons/7/71/Ninedragonwallpic1.jpg',
-'https://upload.wikimedia.org/wikipedia/commons/4/4f/Zmei_Gorynich_-_Ystad-2019.jpg']
+let carouselSlides = ['jacket.jpg',
+'mittens.jpg',
+'hat.jpg']
 
 const currentSlide = ref(0)
 const carouselImageSelector = new CarouselImageSelector();

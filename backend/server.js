@@ -8,18 +8,13 @@ const app = express();
 
 const secretController = require('./secretController.js')
 const stripeController = require('./stripeController.js')
-const databaseConnectionService = require('./databaseConnectionService.js')
 
 const setupStripe = async () => {
   const stripeSecret = await secretController.getSecretFromVault(process.env.AZURE_STRIPE_SECRET_NAME);
   stripeController.setStripeSecret(stripeSecret);
 } 
-const setupDbConnection = async () => {
-  await databaseConnectionService.connectToDatabase();
-}
 
 setupStripe();
-setupDbConnection();
 
 app.use(bodyParser.json());
 app.use(cors());
