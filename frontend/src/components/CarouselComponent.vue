@@ -3,8 +3,8 @@
         <div class="slide-info" v-for="slide, index in carouselSlides" :key="index">
             <transition name="slide" mode="in-out">
                 <div v-show="currentSlide === index">
-                    <router-link to="/checkout">
-                        <img class="carousel-image" :src="require(`@/assets/images/${slide}`)" />
+                    <router-link :to="`/details/${slide.itemGuid}`">
+                        <img class="carousel-image" :src="require(`@/assets/images/${slide.imageUrl}`)" />
                     </router-link>
                 </div>
             </transition>
@@ -26,12 +26,11 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref } from 'vue'
 import { CarouselImageSelector } from '@/services/carouselImageSeletor'
+import carouselItemsJson from '@/assets/data/carouselItems.json';
 
-let carouselSlides = ['jacket.jpg',
-'mittens.jpg',
-'hat.jpg']
+let carouselSlides = carouselItemsJson
 
 const currentSlide = ref(0)
 const carouselImageSelector = new CarouselImageSelector();
