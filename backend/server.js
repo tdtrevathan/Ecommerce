@@ -8,6 +8,7 @@ const app = express();
 
 const secretController = require('./secretController.js')
 const stripeController = require('./stripeController.js')
+const productDetailsController = require('./productDetailsController.js')
 
 const setupStripe = async () => {
   const stripeSecret = await secretController.getSecretFromVault(process.env.AZURE_STRIPE_SECRET_NAME);
@@ -35,5 +36,17 @@ app.post('/create-payment-intent', async (req, res) => {
   await stripeController.createPaymentIntent(req, res);
 });
 
+app.get('/product/:param', async (req, res) => {
+  console.log(req)
+  const { param } = req.params;
+  console.log('made its')
+  try {
+    const product = await productDetailsController.getProduct(param)
+    res.json({ product });
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
 
 app.listen(5000, () => console.log('Server running on port 5000'));
