@@ -1,6 +1,10 @@
 <template>
   <nav>
     <router-link to="/">Home</router-link> |
+
+    <router-link to="/checkout">
+      <i class="fa-solid fa-cart-shopping absolute"></i>
+    </router-link>
   </nav>
   <router-view/>
 </template>
@@ -14,6 +18,10 @@
   color: #2c3e50;
 }
 
+body{
+  background-color: lightseagreen;
+}
+
 nav {
   padding: 30px;
 }
@@ -24,6 +32,10 @@ nav a {
 }
 
 nav a.router-link-exact-active {
-  color: #42b983;
+  color: #83e4ff;
+}
+
+* {
+  caret-color: transparent;
 }
 </style>
