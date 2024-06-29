@@ -26,11 +26,9 @@ let product = ref({imageUrl: '',
 let loaded = ref(false);
 
 onMounted( async() => {
-    console.log('calling backend')
     const response = await axios.get(`http://localhost:5000/product/${itemGuid.value}`);
     product.value = response.data.product;
     loaded.value = true;
-    console.log('product', product.value)
 })
 </script>
 
