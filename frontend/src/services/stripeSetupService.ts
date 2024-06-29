@@ -18,7 +18,6 @@ export class StripeSetupService {
             console.log("An error occured", err)
             return
         }
-
     }
     getPublicKey = async () => {
         try {

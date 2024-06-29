@@ -3,8 +3,6 @@ let stripe = null;
 
 exports.setStripeSecret = async (secret) => {
     try{
-      //onst response = await getSecret(secret);
-      //const key = response.data;
       stripe = require('stripe')(secret);
     }
     catch(err){
