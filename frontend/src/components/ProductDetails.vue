@@ -2,11 +2,12 @@
 <div v-if="loaded">
     <h1>{{ product.name }}</h1>
     <img class="detailsImg" :src="require(`@/assets/images/${product.imageUrl}`)"/>
+    <p>${{ product.price }}</p>
     <p>{{ product.description }}</p>
-    <span>${{ product.price }}</span>
+    <div>
+        <button class="btn btn-primary">Add to Cart</button>
+    </div>
 </div>
-<div></div>
-
 </template>
 
 <script setup lang="ts">
@@ -34,6 +35,7 @@ onMounted( async() => {
 
 <style>
     .detailsImg {
+        max-width: 400px;
         width: 400px;
     }
 </style>

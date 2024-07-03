@@ -19,7 +19,7 @@
 }
 
 body{
-  background-color: lightseagreen;
+  background-color: lightseagreen !important;
 }
 
 nav {

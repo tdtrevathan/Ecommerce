@@ -5,7 +5,7 @@
                 <transition name="slide" mode="in-out">
                     <div v-show="currentSlide === index">
                         <router-link :to="`/details/${slide.productGuid}`">
-                            <img class="carousel-image" :src="require(`@/assets/images/${slide.imageUrl}`)" />
+                            <img :src="require(`@/assets/images/${slide.imageUrl}`)" />
                         </router-link>
                     </div>
                 </transition>
@@ -126,7 +126,7 @@ i {
 
 .slide-info {
   position: absolute;
-  width: 70vh;
+  width: 60vh;
   cursor: pointer;
   z-index: 1;
 }

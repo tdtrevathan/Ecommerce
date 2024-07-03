@@ -1,6 +1,6 @@
 <template>
     <div>
-      <div class="modal">
+      <div class="my-modal">
         <div class="modal-content">
           <form id="payment-form" @submit.prevent='handleSubmit'>
             <div id="payment-element">
@@ -23,7 +23,6 @@
   import { StripeSetupService } from '@/services/stripeSetupService'
   import axios from 'axios'
   
-  //TODO turn key into secret
   let stripePromise: any = null;
   let stripe: any = null;
   
@@ -116,7 +115,7 @@
     height: 450px;
   }
   
-  .modal {
+  .my-modal {
     max-width: 15000px;
     width: 100%;
     height: 400px;
