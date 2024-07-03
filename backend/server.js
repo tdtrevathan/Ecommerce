@@ -37,12 +37,23 @@ app.post('/create-payment-intent', async (req, res) => {
 });
 
 app.get('/product/:param', async (req, res) => {
-  console.log(req)
+
   const { param } = req.params;
-  console.log('made its')
+
   try {
     const product = await productDetailsController.getProduct(param)
     res.json({ product });
+  } catch (error) {
+    console.error('Error fetching product:', error);
+    res.status(500).json({ error: 'Internal Server Error' });
+  }
+})
+
+app.get('/product/', async (req, res) => {
+
+  try {
+    const products = await productDetailsController.getAll();
+    res.json({ products });
   } catch (error) {
     console.error('Error fetching product:', error);
     res.status(500).json({ error: 'Internal Server Error' });

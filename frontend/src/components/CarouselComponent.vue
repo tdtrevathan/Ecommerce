@@ -1,47 +1,58 @@
 <template>
-    <div class="carousel">
-        <div class="slide-info" v-for="slide, index in carouselSlides" :key="index">
-            <transition name="slide" mode="in-out">
-                <div v-show="currentSlide === index">
-                    <router-link :to="`/details/${slide.itemGuid}`">
-                        <img class="carousel-image" :src="require(`@/assets/images/${slide.imageUrl}`)" />
-                    </router-link>
-                </div>
-            </transition>
-        </div>
+    <div>
+        <div v-if="carouselLoaded" class="carousel">
+            <div class="slide-info" v-for="slide, index in carouselSlides" :key="slide.productGuid">
+                <transition name="slide" mode="in-out">
+                    <div v-show="currentSlide === index">
+                        <router-link :to="`/details/${slide.productGuid}`">
+                            <img class="carousel-image" :src="require(`@/assets/images/${slide.imageUrl}`)" />
+                        </router-link>
+                    </div>
+                </transition>
+            </div>
 
-        <div class="navigate-buttons">
-            <div class="toggle-page left">
-                <i class="fas fa-chevron-left" @click="decriment"></i>
+            <div class="navigate-buttons">
+                <div class="toggle-page left">
+                    <i class="fas fa-chevron-left" @click="decriment"></i>
+                </div>
+                <div class="toggle-page right">
+                    <i class="fas fa-chevron-right" @click="incriment"></i>
+                </div>
             </div>
-            <div class="toggle-page right">
-                <i class="fas fa-chevron-right" @click="incriment"></i>
+
+            <div v-for="slide, index in carouselSlides" :key="index" class="carousel-nav">
+                <i :class="{ 'active': currentSlide === index }" class="mini-nav-button"
+                    @click="selectImage(index)"></i>
             </div>
-        </div>
-        
-        <div v-for="slide, index in carouselSlides" :key="index" class="carousel-nav">
-            <i :class="{ 'active': currentSlide === index }" class="mini-nav-button" @click="selectImage(index)"></i>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { ref, onMounted } from 'vue'
 import { CarouselImageSelector } from '@/services/carouselImageSeletor'
-import carouselItemsJson from '@/assets/data/carouselItems.json';
+import { ProductService } from '@/services/productService'
+import { ProductModel } from '@/models/productModel';
 
-let carouselSlides = carouselItemsJson
+const productService = new ProductService();
+const carouselSlides = ref<ProductModel[]>([new ProductModel()])
+const carouselLoaded = ref(false); 
+
+onMounted(async () => {
+   carouselSlides.value = await productService.getAllProducts();
+    carouselLoaded.value = true;
+});
 
 const currentSlide = ref(0)
 const carouselImageSelector = new CarouselImageSelector();
 
 const incriment = () => {
     currentSlide.value = 
-    carouselImageSelector.incriment(currentSlide.value, carouselSlides.length)
+    carouselImageSelector.incriment(currentSlide.value, carouselSlides.value.length)
 } 
 const decriment = () => {
     currentSlide.value = 
-    carouselImageSelector.decriment(currentSlide.value, carouselSlides.length)
+    carouselImageSelector.decriment(currentSlide.value, carouselSlides.value.length)
 }
 
 const selectImage = (index: number) => {

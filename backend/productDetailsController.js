@@ -4,11 +4,20 @@ const databseConnectionService = require('./databaseConnectionService')
 
 exports.getProduct = async (itemGuid) => {
     const database = await databseConnectionService.connectToDatabase();
-    const products = database.collection('products');
+    const collection = database.collection('products');
     
-    const objectId = new ObjectId('66807765dddbd02946487020');
+    const objectId = new ObjectId(itemGuid);
     const query = { _id: objectId };
-    const product = await products.findOne(query)
+    const product = await collection.findOne(query)
 
     return product;
+}
+
+exports.getAll = async () => {
+    const database = await databseConnectionService.connectToDatabase();
+    const collection = database.collection('products');
+    
+    const products = await collection.find({}).limit(10).toArray();
+
+    return products;
 }
