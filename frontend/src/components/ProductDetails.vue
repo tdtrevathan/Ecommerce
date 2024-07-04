@@ -11,13 +11,15 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted } from 'vue'
-import { useRoute } from 'vue-router';
-import { ref } from 'vue';
-import axios from 'axios';
+import { onMounted, ref, defineProps } from 'vue'
+import { ProductService } from '@/services/productService';
 
-const route = useRoute();
-const itemGuid = ref(route.params.itemGuid);
+const props = defineProps<{
+  itemGuid: string;
+}>();
+
+const productService = new ProductService();
+const itemGuid = ref<string>(props.itemGuid);
 
 let product = ref({imageUrl: '',
     price: 0.00,
@@ -27,8 +29,8 @@ let product = ref({imageUrl: '',
 let loaded = ref(false);
 
 onMounted( async() => {
-    const response = await axios.get(`http://localhost:5000/product/${itemGuid.value}`);
-    product.value = response.data.product;
+    const response = await productService.getProduct(itemGuid.value);
+    product.value = response;
     loaded.value = true;
 })
 </script>

@@ -3,18 +3,21 @@ import { ProductModel } from '@/models/productModel'
 
 export class ProductService {
     getProduct = async (productGuid:string) => {
+        
         try{
             const response = await axios.get(`http://localhost:5000/product/${productGuid}`);
-            
+
             if(response.status === 200 && response.data){
-                return mapResponseToModel(response.data);
+                return mapResponseToModel(response.data.product);
             }
             else{
                 console.log('Product not found')
+                return new ProductModel();
             }
         }
         catch (err){
             console.log("Failed to get product", err);
+            return new ProductModel();
         }
     }
 
@@ -53,6 +56,5 @@ const mapResponseToModel = (productData:any) => {
     product.price = productData.price;
     product.imageUrl = productData.imageUrl;
 
-    console.log('mapitem',product)
     return product;
 }
