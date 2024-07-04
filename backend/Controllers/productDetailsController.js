@@ -1,6 +1,6 @@
 const { ObjectId } = require('mongodb');
 
-const databseConnectionService = require('./databaseConnectionService')
+const databseConnectionService = require('../Services/databaseConnectionService')
 
 exports.getProduct = async (itemGuid) => {
     console.log('itemGuid',itemGuid)

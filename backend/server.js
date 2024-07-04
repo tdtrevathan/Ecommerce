@@ -1,14 +1,13 @@
+require('dotenv').config();
 
 const express = require('express');
-const router = express.Router();
-require('dotenv').config();
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const app = express();
+const myRouter = require('./Router/router.js')
 
-const secretController = require('./secretController.js')
-const stripeController = require('./stripeController.js')
-const productDetailsController = require('./productDetailsController.js')
+const secretController = require('./Controllers/secretController.js')
+const stripeController = require('./Controllers/stripeController.js')
 
 const setupStripe = async () => {
   const stripeSecret = await secretController.getSecretFromVault(process.env.AZURE_STRIPE_SECRET_NAME);
@@ -19,45 +18,6 @@ setupStripe();
 
 app.use(bodyParser.json());
 app.use(cors());
-
-app.get('/secret/:param', async (req, res) => {
-  const { param } = req.params;
-
-  try {
-    const secret = await secretController.getSecretFromVault(param);
-    res.json({ secret });
-  } catch (error) {
-    console.error('Error fetching secret:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-});
-
-app.post('/create-payment-intent', async (req, res) => {
-  await stripeController.createPaymentIntent(req, res);
-});
-
-app.get('/product/:param', async (req, res) => {
-
-  const { param } = req.params;
-
-  try {
-    const product = await productDetailsController.getProduct(param)
-    res.json({ product });
-  } catch (error) {
-    console.error('Error fetching product:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-})
-
-app.get('/product/', async (req, res) => {
-
-  try {
-    const products = await productDetailsController.getAll();
-    res.json({ products });
-  } catch (error) {
-    console.error('Error fetching product:', error);
-    res.status(500).json({ error: 'Internal Server Error' });
-  }
-})
+app.use('/', myRouter);
 
 app.listen(5000, () => console.log('Server running on port 5000'));

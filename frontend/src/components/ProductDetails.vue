@@ -13,6 +13,7 @@
 <script setup lang="ts">
 import { onMounted, ref, defineProps } from 'vue'
 import { ProductService } from '@/services/productService';
+import { NavigationService } from '@/services/navigationService';
 
 const props = defineProps<{
   itemGuid: string;
@@ -21,18 +22,20 @@ const props = defineProps<{
 const productService = new ProductService();
 const itemGuid = ref<string>(props.itemGuid);
 
-let product = ref({imageUrl: '',
+const product = ref({imageUrl: '',
     price: 0.00,
     description: '',
     name: ''
 })
-let loaded = ref(false);
+const loaded = ref(false);
 
 onMounted( async() => {
     const response = await productService.getProduct(itemGuid.value);
     product.value = response;
     loaded.value = true;
 })
+
+
 </script>
 
 <style>
