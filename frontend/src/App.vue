@@ -9,6 +9,14 @@
   <router-view/>
 </template>
 
+<script setup lang="ts">
+  import { CartService } from '@/services/cartService'
+
+  const cartService = new CartService();
+
+  
+</script>
+
 <style>
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;

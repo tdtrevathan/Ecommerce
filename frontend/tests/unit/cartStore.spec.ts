@@ -1,17 +1,26 @@
+import { createPinia, setActivePinia } from 'pinia';
+import { useCartStore } from '@/stores/cartStore';
 import { CartModel } from '@/models/cartModel'
 import { ProductModel } from '@/models/productModel';
 
-describe('CartService', () => {
+describe('CartStore', () => {
     describe('Add to Cart', () => {
+
+        beforeEach(() => {
+            const pinia = createPinia();
+            setActivePinia(pinia);
+        });
+
         test('Add item to cart, cart now contains item', () => {
 
-            const cartModel = new CartModel();
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const product = createProduct();
             const quantity = 1;
     
-            cartModel.addProduct(product, quantity);
+            cartStore.addProduct(product, quantity);
     
-            const result = cartModel.getCart();
+            const result = cartStore.getCart();
     
             expect(result[0].product).toBe(product);
             expect(result[0].quantity).toBe(1);
@@ -19,15 +28,16 @@ describe('CartService', () => {
 
         test('Add item to cart, item is already in cart, quantity is added to that item', () => {
 
-            const cartModel = new CartModel();
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const product1 = createProduct();
             const product2 = createProduct();
             const quantity = 1;
     
-            cartModel.addProduct(product1, quantity);
-            cartModel.addProduct(product2, quantity);
+            cartStore.addProduct(product1, quantity);
+            cartStore.addProduct(product2, quantity);
 
-            const result = cartModel.getCart();
+            const result = cartStore.getCart();
     
             expect(result[0].product).toBe(product1);
             expect(result[0].quantity).toBe(2);
@@ -35,31 +45,38 @@ describe('CartService', () => {
     })
     describe('Remove from Cart, Only One Item', () => {
 
+        beforeEach(() => {
+            const pinia = createPinia();
+            setActivePinia(pinia);
+        });
+
         test('Remove item from cart, cart should be empty', () => {
 
-            const cartModel = new CartModel();
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const product = createProduct();
             const quantity = 1;
     
-            cartModel.addProduct(product, quantity);
+            cartStore.addProduct(product, quantity);
     
-            cartModel.removeProduct(product, quantity);
-            const result = cartModel.getCart();
+            cartStore.removeProduct(product, quantity);
+            const result = cartStore.getCart();
     
             expect(result[0]).toBe(undefined);
         })
     
         test('Remove qty 1 of item from cart, item has quantity 2, one is still left in cart', () => {
     
-            const cartModel = new CartModel();
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const product = createProduct();
             const originalQuantity = 2;
             const quantityToRemove = 1;
     
-            cartModel.addProduct(product, originalQuantity);
+            cartStore.addProduct(product, originalQuantity);
     
-            cartModel.removeProduct(product, quantityToRemove);
-            const result = cartModel.getCart();
+            cartStore.removeProduct(product, quantityToRemove);
+            const result = cartStore.getCart();
     
             expect(result[0].product).toBe(product);
             expect(result[0].quantity).toBe(1);
@@ -67,30 +84,32 @@ describe('CartService', () => {
     
         test('Remove qty 2 of item from cart, item has quantity 2, cart is empty', () => {
     
-            const cartModel = new CartModel();
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const product = createProduct();
             const originalQuantity = 2;
             const quantityToRemove = 2;
     
-            cartModel.addProduct(product, originalQuantity);
+            cartStore.addProduct(product, originalQuantity);
     
-            cartModel.removeProduct(product, quantityToRemove);
-            const result = cartModel.getCart();
+            cartStore.removeProduct(product, quantityToRemove);
+            const result = cartStore.getCart();
     
             expect(result[0]).toBe(undefined);
         })
     
         test('Remove qty 2 of item from cart, item has quantity 1, cart is empty', () => {
-    
-            const cartModel = new CartModel();
+            
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const product = createProduct();
             const originalQuantity = 2;
             const quantityToRemove = 2;
     
-            cartModel.addProduct(product, originalQuantity);
+            cartStore.addProduct(product, originalQuantity);
     
-            cartModel.removeProduct(product, quantityToRemove);
-            const result = cartModel.getCart();
+            cartStore.removeProduct(product, quantityToRemove);
+            const result = cartStore.getCart();
     
             expect(result[0]).toBe(undefined);
         })
@@ -99,18 +118,19 @@ describe('CartService', () => {
     describe('Remove from Cart, With Other Items', () => {
 
         test('Remove item from cart, item is of qty 1, cart should not contain that item', () => {
-
-            const cartModel = new CartModel();
+            
+            const cartStore = useCartStore();
+            cartStore.cartModel = new CartModel();
             const hatProduct = createHatProduct();
             const shoeProduct = createShoesProduct();
             const hatQuantity = 1;
             const shoeQuantity = 1;
     
-            cartModel.addProduct(hatProduct, hatQuantity);
-            cartModel.addProduct(shoeProduct, shoeQuantity);
+            cartStore.addProduct(hatProduct, hatQuantity);
+            cartStore.addProduct(shoeProduct, shoeQuantity);
     
-            cartModel.removeProduct(hatProduct, hatQuantity);
-            const result = cartModel.getCart();
+            cartStore.removeProduct(hatProduct, hatQuantity);
+            const result = cartStore.getCart();
     
             expect(result[0].product).toBe(shoeProduct);
             expect(result[0].quantity).toBe(shoeQuantity);
