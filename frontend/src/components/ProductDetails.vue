@@ -5,7 +5,8 @@
     <p>${{ product.price }}</p>
     <p>{{ product.description }}</p>
     <div>
-        <button class="btn btn-primary">Add to Cart</button>
+        <button @click="addToCart()" class="btn btn-primary">Add to Cart</button>
+        <input type="number" v-model="quantity" min="1"/>
     </div>
 </div>
 </template>
@@ -13,20 +14,19 @@
 <script setup lang="ts">
 import { onMounted, ref, defineProps } from 'vue'
 import { ProductService } from '@/services/productService';
-import { NavigationService } from '@/services/navigationService';
+import { ProductModel } from '@/models/productModel';
+import { useCartStore } from '@/stores/cartStore';
 
 const props = defineProps<{
   itemGuid: string;
 }>();
 
 const productService = new ProductService();
+const cartStore = useCartStore();
 const itemGuid = ref<string>(props.itemGuid);
 
-const product = ref({imageUrl: '',
-    price: 0.00,
-    description: '',
-    name: ''
-})
+const product = ref(new ProductModel());
+const quantity = ref(1);
 const loaded = ref(false);
 
 onMounted( async() => {
@@ -35,6 +35,11 @@ onMounted( async() => {
     loaded.value = true;
 })
 
+const addToCart = () => {
+    cartStore.addProduct(product.value, quantity.value);
+    console.log(quantity.value)
+    console.log(cartStore.getCart())
+}
 
 </script>
 
