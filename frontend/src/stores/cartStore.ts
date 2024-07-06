@@ -28,13 +28,18 @@ export const useCartStore = defineStore('cart', () => {
     
     const removeProduct = (product:ProductModel, quantity:number) => {
         try{
+            console.log('entered store')
             const cartItem = cartModel.products.filter(item => item.product.productGuid === product.productGuid)[0];
-
+            console.log('cart item', cartItem)
+            console.log('cart quantity', cartItem.quantity)
+            console.log('quantity to remove', quantity)
             if(cartItem.product && cartItem.quantity){
                 if(cartItem.quantity <= quantity){
+                    console.log('erase product')
                     cartModel.products = cartModel.products.filter(item => item.product.productGuid !== product.productGuid);
                 }
                 else{
+                    console.log('decriment')
                     const index = cartModel.products.indexOf(cartItem);
                     cartModel.products[index].decrementQuantity(quantity);
                 }
