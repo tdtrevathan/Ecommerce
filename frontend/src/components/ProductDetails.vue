@@ -23,6 +23,7 @@ const props = defineProps<{
 
 const productService = new ProductService();
 const cartStore = useCartStore();
+cartStore.initialize();
 const itemGuid = ref<string>(props.itemGuid);
 
 const product = ref(new ProductModel());
@@ -37,8 +38,6 @@ onMounted( async() => {
 
 const addToCart = () => {
     cartStore.addProduct(product.value, quantity.value);
-    console.log(quantity.value)
-    console.log(cartStore.getCart())
 }
 
 </script>

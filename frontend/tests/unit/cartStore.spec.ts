@@ -11,10 +11,14 @@ describe('CartStore', () => {
             setActivePinia(pinia);
         });
 
+        afterEach(() => {
+            sessionStorage.clear();
+        })
+
         test('Add item to cart, cart now contains item', () => {
 
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const product = createProduct();
             const quantity = 1;
     
@@ -22,14 +26,14 @@ describe('CartStore', () => {
     
             const result = cartStore.getCart();
     
-            expect(result[0].product).toBe(product);
+            expect(result[0].product).toStrictEqual(product);
             expect(result[0].quantity).toBe(1);
         })
 
         test('Add item to cart, item is already in cart, quantity is added to that item', () => {
 
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const product1 = createProduct();
             const product2 = createProduct();
             const quantity = 1;
@@ -39,7 +43,7 @@ describe('CartStore', () => {
 
             const result = cartStore.getCart();
     
-            expect(result[0].product).toBe(product1);
+            expect(result[0].product).toStrictEqual(product1);
             expect(result[0].quantity).toBe(2);
         })
     })
@@ -50,10 +54,14 @@ describe('CartStore', () => {
             setActivePinia(pinia);
         });
 
+        afterEach(() => {
+            sessionStorage.clear();
+        })
+
         test('Remove item from cart, cart should be empty', () => {
 
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const product = createProduct();
             const quantity = 1;
     
@@ -68,7 +76,7 @@ describe('CartStore', () => {
         test('Remove qty 1 of item from cart, item has quantity 2, one is still left in cart', () => {
     
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const product = createProduct();
             const originalQuantity = 2;
             const quantityToRemove = 1;
@@ -78,14 +86,14 @@ describe('CartStore', () => {
             cartStore.removeProduct(product, quantityToRemove);
             const result = cartStore.getCart();
     
-            expect(result[0].product).toBe(product);
+            expect(result[0].product).toStrictEqual(product);
             expect(result[0].quantity).toBe(1);
         })
     
         test('Remove qty 2 of item from cart, item has quantity 2, cart is empty', () => {
     
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const product = createProduct();
             const originalQuantity = 2;
             const quantityToRemove = 2;
@@ -101,7 +109,7 @@ describe('CartStore', () => {
         test('Remove qty 2 of item from cart, item has quantity 1, cart is empty', () => {
             
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const product = createProduct();
             const originalQuantity = 2;
             const quantityToRemove = 2;
@@ -120,7 +128,7 @@ describe('CartStore', () => {
         test('Remove item from cart, item is of qty 1, cart should not contain that item', () => {
             
             const cartStore = useCartStore();
-            cartStore.cartModel = new CartModel();
+            cartStore.initialize();
             const hatProduct = createHatProduct();
             const shoeProduct = createShoesProduct();
             const hatQuantity = 1;
@@ -132,7 +140,7 @@ describe('CartStore', () => {
             cartStore.removeProduct(hatProduct, hatQuantity);
             const result = cartStore.getCart();
     
-            expect(result[0].product).toBe(shoeProduct);
+            expect(result[0].product).toStrictEqual(shoeProduct);
             expect(result[0].quantity).toBe(shoeQuantity);
         })
     })

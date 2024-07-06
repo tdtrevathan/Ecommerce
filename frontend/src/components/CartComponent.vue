@@ -15,8 +15,8 @@
 </template>
 
 <script setup lang="ts">
-import { CartItemModel } from '@/models/cartItemModel';
 import { ProductModel } from '@/models/productModel';
+import { CartItemModel } from '@/models/cartItemModel';
 import { useCartStore } from '@/stores/cartStore';
 import { ref } from 'vue';
 
@@ -24,17 +24,19 @@ const cartStore = useCartStore();
 
 const getMaxQuantity = (quantity:number) => quantity + 1;
 
-const deepClone = (obj:any) => {
-  return JSON.parse(JSON.stringify(obj));
-}
+const deepClone = (obj:CartItemModel[]) => {
+    if(obj){
+        return JSON.parse(JSON.stringify(obj));
+    }
+    else{
+        return []
+    }
 
+}
+console.log('get cart',cartStore.getCart())
 const products = ref(deepClone(cartStore.getCart()));
 
 const removeFromCart = (product:ProductModel, quantity:number) => {
-    console.log('products',products)
-    console.log('cart', cartStore.cartModel.products)
-    console.log('entered function')
     cartStore.removeProduct(product, quantity);
-    console.log('left function')
 }
 </script>
