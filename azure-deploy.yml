@@ -23,12 +23,12 @@ jobs:
 
     - name: Log in to Azure Container Registry
       run: |
-        az acr login --name myacr   # Replace 'myacr' with your ACR name
+        az acr login --name TimTrevRegistry   # Replace 'TimTrevRegistry' with your ACR name
 
     - name: Build and push Docker images
       run: |
-        docker buildx build --platform linux/amd64,linux/arm64 --push -t myacr.azurecr.io/frontend:latest ./frontend
-        docker buildx build --platform linux/amd64,linux/arm64 --push -t myacr.azurecr.io/backend:latest ./backend
+        docker buildx build --platform linux/amd64,linux/arm64 --push -t TimTrevRegistry.azurecr.io/frontend:latest ./frontend
+        docker buildx build --platform linux/amd64,linux/arm64 --push -t TimTrevRegistry.azurecr.io/backend:latest ./backend
 
   deploy:
     runs-on: ubuntu-latest
@@ -46,15 +46,15 @@ jobs:
     - name: Deploy frontend to Azure Container Instances
       run: |
         if az container show --name frontend --resource-group <your_resource_group> > /dev/null 2>&1; then
-          az container update --name frontend --resource-group <your_resource_group> --image myacr.azurecr.io/frontend:latest
+          az container update --name frontend --resource-group <your_resource_group> --image TimTrevRegistry.azurecr.io/frontend:latest
         else
-          az container create --resource-group <your_resource_group> --name frontend --image myacr.azurecr.io/frontend:latest --cpu 1 --memory 1 --registry-login-server myacr.azurecr.io --registry-username ${{ secrets.ACR_USERNAME }} --registry-password ${{ secrets.ACR_PASSWORD }}
+          az container create --resource-group <your_resource_group> --name frontend --image TimTrevRegistry.azurecr.io/frontend:latest --cpu 1 --memory 1 --registry-login-server TimTrevRegistry.azurecr.io --registry-username ${{ secrets.ACR_USERNAME }} --registry-password ${{ secrets.ACR_PASSWORD }}
         fi
 
     - name: Deploy backend to Azure Container Instances
       run: |
         if az container show --name backend --resource-group <your_resource_group> > /dev/null 2>&1; then
-          az container update --name backend --resource-group <your_resource_group> --image myacr.azurecr.io/backend:latest
+          az container update --name backend --resource-group <your_resource_group> --image TimTrevRegistry.azurecr.io/backend:latest
         else
-          az container create --resource-group <your_resource_group> --name backend --image myacr.azurecr.io/backend:latest --cpu 1 --memory 1 --registry-login-server myacr.azurecr.io --registry-username ${{ secrets.ACR_USERNAME }} --registry-password ${{ secrets.ACR_PASSWORD }}
+          az container create --resource-group <your_resource_group> --name backend --image TimTrevRegistry.azurecr.io/backend:latest --cpu 1 --memory 1 --registry-login-server TimTrevRegistry.azurecr.io --registry-username ${{ secrets.ACR_USERNAME }} --registry-password ${{ secrets.ACR_PASSWORD }}
         fi
