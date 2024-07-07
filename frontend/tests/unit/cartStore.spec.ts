@@ -1,6 +1,5 @@
 import { createPinia, setActivePinia } from 'pinia';
 import { useCartStore } from '@/stores/cartStore';
-import { CartModel } from '@/models/cartModel'
 import { ProductModel } from '@/models/productModel';
 
 describe('CartStore', () => {
@@ -122,7 +121,6 @@ describe('CartStore', () => {
             expect(result[0]).toBe(undefined);
         })
     })
-
     describe('Remove from Cart, With Other Items', () => {
 
         test('Remove item from cart, item is of qty 1, cart should not contain that item', () => {
@@ -144,6 +142,31 @@ describe('CartStore', () => {
             expect(result[0].quantity).toBe(shoeQuantity);
         })
     })
+    describe('Calculate Total', () => {
+        beforeEach(() => {
+            const pinia = createPinia();
+            setActivePinia(pinia);
+        });
+
+        afterEach(() => {
+            sessionStorage.clear();
+        })
+        test('Add Two Items, Sum Is Calculated Accurately', () => {
+            const cartStore = useCartStore();
+            cartStore.initialize();
+            const product1 = createHatProduct();
+            const product2 = createShoesProduct();
+            const quantity1 = 1;
+            const quantity2 = 2;
+
+            cartStore.addProduct(product1, quantity1);
+            cartStore.addProduct(product2, quantity2);
+            
+            expect(quantity1*product1.price).toStrictEqual(8);
+            expect(quantity2*product2.price).toStrictEqual(4);
+            expect(cartStore.totalCharge).toStrictEqual(quantity1*product1.price + quantity2*product2.price);
+        })
+    })
 })
 
 const createProduct = () => {
@@ -154,6 +177,7 @@ const createProduct = () => {
     product.productGuid = '1234'
     product.name = 'name'
     product.imageUrl = 'url'
+    product.price = 12
 
     return product;
 }
@@ -166,6 +190,7 @@ const createHatProduct = () => {
     product.productGuid = '1000'
     product.name = 'hat'
     product.imageUrl = 'url'
+    product.price = 8
 
     return product;
 }
@@ -178,6 +203,7 @@ const createShoesProduct = () => {
     product.productGuid = '200'
     product.name = 'shoes'
     product.imageUrl = 'url'
+    product.price = 2
 
     return product;
 }

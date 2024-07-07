@@ -2,7 +2,7 @@
   <nav>
     <router-link to="/">Home</router-link> |
 
-    <router-link to="/checkout">
+    <router-link to="/cart">
       <i class="fa-solid fa-cart-shopping absolute"></i>
     </router-link>
   </nav>
