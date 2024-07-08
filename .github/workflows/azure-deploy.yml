@@ -58,3 +58,4 @@ jobs:
         else
           az container create --resource-group DefaultGroup --name backend --image TimTrevRegistry.azurecr.io/backend:latest --cpu 1 --memory 1 --registry-login-server TimTrevRegistry.azurecr.io --registry-username ${{ secrets.ACR_USERNAME }} --registry-password ${{ secrets.ACR_PASSWORD }}
         fi
+        
