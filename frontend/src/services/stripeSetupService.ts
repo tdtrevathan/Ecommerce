@@ -22,7 +22,7 @@ export class StripeSetupService {
     getPublicKey = async () => {
         try {
             const param = 'PublicStripeToken'
-            const response = await axios.get(`https://timtrevregistry.azurecr.io/secret/${param}`);
+            const response = await axios.get(`https://20.124.165.91/secret/${param}`);
             return response.data.secret;
         }
         catch (err) {
