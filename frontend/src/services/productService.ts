@@ -5,7 +5,7 @@ export class ProductService {
     getProduct = async (productGuid:string) => {
         
         try{
-            const response = await axios.get(`http://localhost:5000/product/${productGuid}`);
+            const response = await axios.get(`https://timtrevregistry.azurecr.io/product/${productGuid}`);
 
             if(response.status === 200 && response.data){
                 return mapResponseToModel(response.data.product);
@@ -23,7 +23,7 @@ export class ProductService {
 
     getAllProducts = async () => {
         try{
-            const response = await axios.get(`http://localhost:5000/product/`);
+            const response = await axios.get(`https://timtrevregistry.azurecr.io/product/`);
             
             if(response.status === 200 && response.data.products){
                 
